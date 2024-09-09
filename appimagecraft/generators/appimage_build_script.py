@@ -83,7 +83,7 @@ class AppImageBuildScriptGenerator:
                 filename = "linuxdeploy-plugin-{name}-$ARCH.AppImage".format(name=name)
 
             return (
-                "https://github.com/linuxdeploy/linuxdeploy-plugin-{name}"
+                "https://github.com/tdewey-rpi/linuxdeploy-plugin-{name}"
                 "/releases/download/continuous/{filename}".format(name=name, filename=filename)
             )
 
