@@ -38,7 +38,7 @@ class AppImageBuildScriptGenerator:
             raise ValueError("Invalid arch: {}".format(arch))
 
         url = (
-            "https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/"
+            "https://github.com/tdewey-rpi/linuxdeploy/releases/download/continuous/"
             "linuxdeploy-{}.AppImage".format(arch)
         )
 
@@ -85,10 +85,25 @@ class AppImageBuildScriptGenerator:
                 "https://github.com/linuxdeploy/linuxdeploy-plugin-{name}"
                 "/releases/download/continuous/{filename}".format(name=name, filename=filename)
             )
+        
+        def build_rpi_forked_plugin_url(name: str, filename: str = None):
+            if filename is None:
+                filename = "linuxdeploy-plugin-{name}-$ARCH.AppImage".format(name=name)
+
+            return (
+                "https://github.com/tdewey-rpi/linuxdeploy-plugin-{name}"
+                "/releases/download/continuous/{filename}".format(name=name, filename=filename)
+            )
 
         def build_official_shell_script_plugin_url(name: str):
             return (
                 f"https://raw.githubusercontent.com/linuxdeploy/linuxdeploy-plugin-{name}/master/"
+                f"linuxdeploy-plugin-{name}.sh"
+            )
+        
+        def build_rpi_forked_shell_script_plugin_url(name: str):
+            return (
+                f"https://raw.githubusercontent.com/tdewey-rpi/linuxdeploy-plugin-{name}/master/"
                 f"linuxdeploy-plugin-{name}.sh"
             )
 
@@ -98,15 +113,19 @@ class AppImageBuildScriptGenerator:
                 f"linuxdeploy-plugin-{name}.sh"
             )
 
-        known_plugin_urls = {
-            "qt": build_official_plugin_url("qt"),
-        }
+        known_plugin_urls = {}
 
-        for plugin_name in ["conda", "gtk", "perl", "gstreamer", "ncurses"]:
+        for plugin_name in ["gtk", "perl", "gstreamer", "ncurses"]:
             known_plugin_urls[plugin_name] = build_official_shell_script_plugin_url(plugin_name)
 
+        for forked_plugin_name in ["qt"]:
+            known_plugin_urls[forked_plugin_name] = build_rpi_forked_plugin_url(forked_plugin_name)
+
+        for forked_shell_plugin_name in ["conda"]:
+            known_plugin_urls[forked_shell_plugin_name] = build_rpi_forked_shell_script_plugin_url(forked_shell_plugin_name)
+
         for misc_plugin_name in ["gdb", "gettext"]:
-            known_plugin_urls[misc_plugin_name] = build_official_misc_plugin_url(plugin_name)
+            known_plugin_urls[misc_plugin_name] = build_official_misc_plugin_url(misc_plugin_name)
 
         ld_plugins = {}
 
