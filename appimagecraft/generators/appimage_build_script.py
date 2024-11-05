@@ -27,8 +27,7 @@ class AppImageBuildScriptGenerator:
         # there's a few valid aliases for the known valid archs, which we can substitute automatically
         substitutes = {
             "amd64": "x86_64",
-            "i586": "i386",
-            "i686": "i386",
+
         }
         try:
             arch = substitutes[arch]
